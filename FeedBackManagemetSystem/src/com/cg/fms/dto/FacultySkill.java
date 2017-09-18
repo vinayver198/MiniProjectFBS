@@ -13,6 +13,8 @@
 
 package com.cg.fms.dto;
 
+import java.util.Arrays;
+
 
 /** */
 public class FacultySkill {
@@ -23,10 +25,61 @@ public class FacultySkill {
 	private String[] skillSet;
 	
 	/** */
-	public Object name;
+	public String name;
 	
 	/** */
-	public void FacultySkill() {
+	public  FacultySkill()
+	{
 	
 	}
+	
+	
+	
+	
+	public FacultySkill(int id, String[] skillSet, String name) {
+		super();
+		this.id = id;
+		this.skillSet = skillSet;
+		this.name = name;
+	}
+
+
+
+
+	public int getId() {
+		return id;
+	}
+
+	public String[] getSkillSet() {
+		return skillSet;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setSkillSet(String[] skillSet) {
+		this.skillSet = skillSet;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+
+
+	@Override
+	public String toString() {
+		return "FacultySkill [id=" + id + ", skillSet="
+				+ Arrays.toString(skillSet) + ", name=" + name + "]";
+	}
+	
+	
+	
+	
 }

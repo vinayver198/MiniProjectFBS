@@ -13,6 +13,8 @@
 
 package com.cg.fms.dto;
 
+import java.util.Arrays;
+
 
 /** */
 public class Course {
@@ -25,8 +27,72 @@ public class Course {
 	/** */
 	private int duration;
 	
+	private int[] faculty;
+	
+	
 	/** */
 	public void Course() {
 	
 	}
+
+
+	public int getId() {
+		return id;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public int getDuration() {
+		return duration;
+	}
+
+
+	public int[] getFaculty() {
+		return faculty;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+
+	public void setFaculty(int[] faculty) {
+		this.faculty = faculty;
+	}
+
+
+	public Course(int id, String name, int duration, int[] faculty) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.duration = duration;
+		this.faculty = faculty;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Course [id=" + id + ", name=" + name + ", duration=" + duration
+				+ ", faculty=" + Arrays.toString(faculty) + "]";
+	}
+	
+	
+	
+	
+	
 }
