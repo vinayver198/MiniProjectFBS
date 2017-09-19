@@ -14,33 +14,35 @@
 package com.cg.fms.service;
 
 import java.util.List;
+
 import com.cg.fms.dto.Feedback;
 import com.cg.fms.dto.Employee;
 import com.cg.fms.dto.Course;
 import com.cg.fms.dto.FacultySkill;
 import com.cg.fms.dto.TrainingProgram;
+import com.cg.fms.exception.FeedbackSysException;
 
 
 /** */
 public interface TrainingAdminService {
 	/** */
-	public List<Feedback> getAllParticipantFeedback();
+	public List<Feedback> getAllParticipantFeedback() throws FeedbackSysException;
 	
 	/** */
-	public void getAllFeedbackDefaulterParticipant();
+	public void getAllFeedbackDefaulterParticipant() throws FeedbackSysException;
 	
 	/** */
-	public List<FacultySkill> getAllFacultyList();
+	public List<FacultySkill> getAllFacultyList() throws FeedbackSysException;
 	
 	/** */
-	public List<Course> getAllCourseList();
+	public List<Course> getAllCourseList() throws FeedbackSysException;
 	
 	/** */
-	public boolean updateCourseWithId(int id);
+	public boolean updateCourseWithId(int id) throws FeedbackSysException;
 	
 	/** */
-	public List<Employee> getAllEmployeeList();
+	public List<Employee> getAllEmployeeList() throws FeedbackSysException;
 	
 	/** */
-	public List<TrainingProgram> getAllTrainingProgramList();
+	public List<TrainingProgram> getAllTrainingProgramList() throws FeedbackSysException;
 }

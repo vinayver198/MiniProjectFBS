@@ -2,6 +2,8 @@ package com.cg.fms.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.cg.fms.dto.Course;
 import com.cg.fms.dto.FacultySkill;
+import com.cg.fms.exception.FeedbackSysException;
 import com.cg.fms.service.TrainingAdminService;
 import com.cg.fms.service.TrainingAdminServiceImpl;
 
@@ -23,12 +26,18 @@ public class AdminController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private TrainingAdminService adminService;
+	private ArrayList<FacultySkill> facultyArrayList = null;
+	private ArrayList<Course> courseArrayList = null;
+	
+	private ArrayList<String> facultiesNameList = null;
+	private HashMap<String,Integer> facultiesMap = null;
 	
     /**
      * Default constructor. 
      */
     public AdminController() {
     	adminService = new TrainingAdminServiceImpl();
+    	
     }
 
 	/**
@@ -40,40 +49,39 @@ public class AdminController extends HttpServlet {
 		String action = request.getParameter("action");
 		System.out.println("action : " + action );
 		
-		
 		switch(action){
 		
 		case "facultyMaintancePage":
-			// get all faculty and course list from table
-			// display the list in jsp page
-			// display dynamic drop down
-			// Dispatch to Faculty Maintance Page
-			
-			String[] skills = {"java","c#","android","angularJs"};
-			
-			ArrayList<FacultySkill> facultyArrayList = new ArrayList<FacultySkill>();
-			
-			for(int i=0;i<10;i++){
-				facultyArrayList.add(new FacultySkill((i+1),skills,"faculty" + (i+1)));
+
+			if(facultyArrayList == null && courseArrayList == null){
+				
+			facultiesNameList = new ArrayList<String>();
+			facultiesMap = new HashMap<String,Integer>();
+				try {
+				
+					facultyArrayList = (ArrayList<FacultySkill>) adminService.getAllFacultyList();
+				
+					courseArrayList = (ArrayList<Course>) adminService.getAllCourseList();
+				
+					for(FacultySkill fs : facultyArrayList){
+						facultiesNameList.add(fs.getName());
+						facultiesMap.put(fs.getName(),fs.getId());
+					}
+				
+				} catch (FeedbackSysException e) {
+					e.printStackTrace();
+				}
+						
 			}
 			
+			request.setAttribute("facultiesMap", facultiesMap);
 			request.setAttribute("facultyList", facultyArrayList);
-			
-			
-			int[] faculties = {1,2,3,4};
-			String[] facultiesNameList = {"vikas","vinay","karan","vegeta","itachi"};
-			ArrayList<Course> courseArrayList = new ArrayList<Course>();
-			
-			for(int i=0;i<10;i++){
-				courseArrayList.add(new Course((i+1),"Course",5,faculties));
-			}
-			
 			request.setAttribute("courseArrayList", courseArrayList);
 			request.setAttribute("facultiesNameList", facultiesNameList);
 			
 			request.getSession().setAttribute("role", "admin");
 			view = getServletContext().getRequestDispatcher(
-					"/pages/facultyMaintance.jsp");
+					"/pages/facultyMaintenance.jsp");
 			view.forward(request, response);
 			
 			break;
@@ -115,6 +123,53 @@ public class AdminController extends HttpServlet {
 		
 		case "generatefeedback":
 			// update table
+			break;
+		
+		case "AssignFaculty":
+			// assign faculty to course
+			
+			String jspTableIndex = request.getParameter("courseCounterNo");
+			String facultyNameToAdd = request.getParameter("ddfacultyNameList"+jspTableIndex);
+			
+			List<String> assignedFacultylist = courseArrayList.get(
+													Integer.parseInt(jspTableIndex)).getFacultyNames();
+			
+			List<Integer> assignedFacltyIdsList = courseArrayList.get(
+							Integer.parseInt(jspTableIndex)).getFaculty();
+			
+			if(request.getParameter("btAssignFaculty"+jspTableIndex) != null){
+				
+				if(!assignedFacultylist.contains(facultyNameToAdd)){
+					assignedFacultylist.add(facultyNameToAdd);
+					assignedFacltyIdsList.add(facultiesMap.get(facultyNameToAdd));
+				}
+				
+			}else{
+				
+				for(int i=0;i< assignedFacultylist.size() ;i++){
+					String name = request.getParameter("btRemoveFaculty"+Integer.parseInt(jspTableIndex)+i);
+					
+					if(name != null){
+						assignedFacultylist.remove(i);
+						assignedFacltyIdsList.remove(i);
+					}
+				}
+				
+			}
+			
+			
+			courseArrayList.get(Integer.parseInt(jspTableIndex)).setFacultyNames(assignedFacultylist);
+			courseArrayList.get(Integer.parseInt(jspTableIndex)).setFaculty(assignedFacltyIdsList);
+			
+			request.setAttribute("facultyList", facultyArrayList);
+			request.setAttribute("courseArrayList", courseArrayList);
+			request.setAttribute("facultiesNameList", facultiesNameList);
+			
+			view = getServletContext().getRequestDispatcher(
+					"/pages/facultyMaintenance.jsp");
+			
+			view.forward(request, response);
+			
 			break;
 		
 		default:

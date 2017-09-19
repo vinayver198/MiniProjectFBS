@@ -13,31 +13,115 @@
 
 package com.cg.fms.dto;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 
-/** */
+/* JAVA BEAN: 		TrainingProgram
+ * Author Name: 	Roshni Patel
+ * Description:		Java Bean generated  
+ * */
+
 public class TrainingProgram {
-	/** */
+	
 	private int trainingCode;
 	
-	/** */
 	private int facultyCode;
 	
-	/** */
 	private int courseCode;
 	
-	/** */
-	private LocalDate startDate;
+	private Date startDate;
 	
-	/** */
-	private LocalDate endDate;
+	private Date endDate;
 	
-	/** */
 	private String trainingName;
 	
-	/** */
-	public void TrainingProgram() {
-	
+	public TrainingProgram(int trainingCode, int facultyCode, int courseCode,
+			Date startDate, Date endDate, String trainingName) {
+		super();
+		this.trainingCode = trainingCode;
+		this.facultyCode = facultyCode;
+		this.courseCode = courseCode;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.trainingName = trainingName;
+	}
+
+	public TrainingProgram() {
+		super();
+	}
+
+	public TrainingProgram(int facultyCode, int courseCode, Date startDate,
+			Date endDate) {
+		super();
+		this.facultyCode = facultyCode;
+		this.courseCode = courseCode;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+
+	public TrainingProgram(int trainingCode, int facultyCode, int courseCode,
+			Date startDate, Date endDate) {
+		super();
+		this.trainingCode = trainingCode;
+		this.facultyCode = facultyCode;
+		this.courseCode = courseCode;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+
+	@Override
+	public String toString() {
+		return "TrainingProgram [trainingCode=" + trainingCode
+				+ ", facultyCode=" + facultyCode + ", courseCode=" + courseCode
+				+ ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", trainingName=" + trainingName + "]";
+	}
+
+	public int getTrainingCode() {
+		return trainingCode;
+	}
+
+	public void setTrainingCode(int trainingCode) {
+		this.trainingCode = trainingCode;
+	}
+
+	public int getFacultyCode() {
+		return facultyCode;
+	}
+
+	public void setFacultyCode(int facultyCode) {
+		this.facultyCode = facultyCode;
+	}
+
+	public int getCourseCode() {
+		return courseCode;
+	}
+
+	public void setCourseCode(int courseCode) {
+		this.courseCode = courseCode;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date date) {
+		this.startDate = date;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getTrainingName() {
+		return trainingName;
+	}
+
+	public void setTrainingName(String trainingName) {
+		this.trainingName = trainingName;
 	}
 }

@@ -15,32 +15,47 @@ package com.cg.fms.service;
 
 import java.util.List;
 
+import com.cg.fms.dao.FMSDao;
+import com.cg.fms.dao.FMSDaoImpl;
 import com.cg.fms.dto.Course;
 import com.cg.fms.dto.Employee;
 import com.cg.fms.dto.FacultySkill;
 import com.cg.fms.dto.Feedback;
 import com.cg.fms.dto.TrainingProgram;
+import com.cg.fms.exception.FeedbackSysException;
 
 
 /** */
 public class TrainingAdminServiceImpl implements TrainingAdminService {
 	/** */
+	
+	private FMSDao fmsDao;
+	
+	public TrainingAdminServiceImpl() {
+		super();
+		fmsDao = new FMSDaoImpl(); 
+	}
+	
 	public List<Feedback> getAllParticipantFeedback() {
 		return null;
 	}
+	
 	
 	/** */
 	public void getAllFeedbackDefaulterParticipant() {
 	}
 	
-	/** */
-	public List<FacultySkill> getAllFacultyList() {
-		return null;
+	/**
+	 * @throws FeedbackSysException  */
+	public List<FacultySkill> getAllFacultyList() throws FeedbackSysException {
+		
+		return fmsDao.getAllFacultyList();
 	}
 	
-	/** */
-	public List<Course> getAllCourseList() {
-		return null;
+	/**
+	 * @throws FeedbackSysException  */
+	public List<Course> getAllCourseList() throws FeedbackSysException {
+		return fmsDao.getAllCourseList();
 	}
 	
 	/** */

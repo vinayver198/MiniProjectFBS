@@ -13,6 +13,7 @@
 
 package com.cg.fms.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.cg.fms.dto.Course;
@@ -20,46 +21,49 @@ import com.cg.fms.dto.Employee;
 import com.cg.fms.dto.FacultySkill;
 import com.cg.fms.dto.Feedback;
 import com.cg.fms.dto.TrainingProgram;
+import com.cg.fms.exception.FeedbackSysException;
 
 
 /** */
 public interface FMSDao {
 	/** */
-	public List<TrainingProgram> getAllTrainingProgramList();
+	public List<TrainingProgram> getAllTrainingProgramList() throws FeedbackSysException;
 	
 	/** */
-	public boolean updateTrainingProgramWithId(int id);
+	public boolean updateTrainingProgramWithId(TrainingProgram program) throws FeedbackSysException;
 	
 	/** */
-	public List<String> getAllTrainingProgramNames();
+	public List<String> getAllTrainingProgramNames() throws FeedbackSysException;
 	
 	/** */
-	public void addNewTrainingProgram(com.cg.fms.dto.TrainingProgram trainneEnrollment);
+	public boolean addNewTrainingProgram(com.cg.fms.dto.TrainingProgram trainneEnrollment) throws FeedbackSysException;
 	
 	/** */
-	public List<FacultySkill> getAllFacultyList();
+	public List<FacultySkill> getAllFacultyList() throws FeedbackSysException;
 	
 	/** */
-	public List<Course> getAllCourseList();
+	public List<Course> getAllCourseList() throws FeedbackSysException;
 	
 	/** */
-	public boolean updateCourseWithId(int id);
+	public boolean updateCourseWithId(Course course) throws FeedbackSysException;
 	
 	/** */
-	public List<String> getCourseNames();
+	public HashMap<Integer,String> getCourseNames() throws FeedbackSysException;
 	
 	/** */
-	public List<Employee> getAllEmployeeList();
+	public List<Employee> getAllEmployeeList() throws FeedbackSysException;
 	
 	/** */
-	public List<String> getEmployeeNames();
+	public HashMap<Integer,String> getEmployeeNames() throws FeedbackSysException;
 	
 	/** */
-	public List<Feedback> getAllfeedbackList();
+	public List<Feedback> getAllfeedbackList() throws FeedbackSysException;
 	
 	/** */
-	public boolean addNewFeedback(com.cg.fms.dto.Feedback feedback);
+	public boolean addNewFeedback(com.cg.fms.dto.Feedback feedback) throws FeedbackSysException;
 	
 	/** */
-	public boolean addNewParticipantTrainingEnroll(com.cg.fms.dto.TrainingParticipant Parameter1);
+	public boolean addNewParticipantTrainingEnroll(com.cg.fms.dto.TrainingParticipant Parameter1) throws FeedbackSysException;
+
+	public Course removeCourse(int id) throws FeedbackSysException;
 }

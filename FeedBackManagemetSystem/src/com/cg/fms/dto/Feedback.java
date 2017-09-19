@@ -11,8 +11,15 @@
 
 
 
+/** 
+	 * @ Date : 16-09-2017
+  	*  @ Author : Shubham Parasher
+  	*  @ Description : Feedback DTO
+  	*  */
+
 package com.cg.fms.dto;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 
@@ -49,10 +56,150 @@ public class Feedback {
 	private String participantName;
 	
 	/** */
-	private LocalDate feedbackDate;
+	private Date feedbackDate;
 	
 	/** */
 	public void Feedback() {
-	
+	    
 	}
+
+	public Feedback() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Feedback(int participantId, int trainingCode, String comment,
+			String suggestions, int fbPrsComm, int fbClrfyDbts, int fbTm,
+			int fbHandout, int fBHwSwNtwrk, String participantName,
+			Date feedbackDate) {
+		super();
+		this.participantId = participantId;
+		this.trainingCode = trainingCode;
+		this.comment = comment;
+		this.suggestions = suggestions;
+		FbPrsComm = fbPrsComm;
+		FbClrfyDbts = fbClrfyDbts;
+		FbTm = fbTm;
+		FbHandout = fbHandout;
+		FBHwSwNtwrk = fBHwSwNtwrk;
+		this.participantName = participantName;
+		this.feedbackDate = feedbackDate;
+	}
+	
+	
+
+	public Feedback(int participantId, int trainingCode, String comment,
+			String suggestions, int fbPrsComm, int fbClrfyDbts, int fbTm,
+			int fbHandout, int fBHwSwNtwrk, Date feedbackDate) {
+		super();
+		this.participantId = participantId;
+		this.trainingCode = trainingCode;
+		this.comment = comment;
+		this.suggestions = suggestions;
+		FbPrsComm = fbPrsComm;
+		FbClrfyDbts = fbClrfyDbts;
+		FbTm = fbTm;
+		FbHandout = fbHandout;
+		FBHwSwNtwrk = fBHwSwNtwrk;
+		this.feedbackDate = feedbackDate;
+	}
+
+	public int getParticipantId() {
+		return participantId;
+	}
+
+	public void setParticipantId(int participantId) {
+		this.participantId = participantId;
+	}
+
+	public int getTrainingCode() {
+		return trainingCode;
+	}
+
+	public void setTrainingCode(int trainingCode) {
+		this.trainingCode = trainingCode;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getSuggestions() {
+		return suggestions;
+	}
+
+	public void setSuggestions(String suggestions) {
+		this.suggestions = suggestions;
+	}
+
+	public int getFbPrsComm() {
+		return FbPrsComm;
+	}
+
+	public void setFbPrsComm(int fbPrsComm) {
+		FbPrsComm = fbPrsComm;
+	}
+
+	public int getFbClrfyDbts() {
+		return FbClrfyDbts;
+	}
+
+	public void setFbClrfyDbts(int fbClrfyDbts) {
+		FbClrfyDbts = fbClrfyDbts;
+	}
+
+	public int getFbTm() {
+		return FbTm;
+	}
+
+	public void setFbTm(int fbTm) {
+		FbTm = fbTm;
+	}
+
+	public int getFbHandout() {
+		return FbHandout;
+	}
+
+	public void setFbHandout(int fbHandout) {
+		FbHandout = fbHandout;
+	}
+
+	public int getFBHwSwNtwrk() {
+		return FBHwSwNtwrk;
+	}
+
+	public void setFBHwSwNtwrk(int fBHwSwNtwrk) {
+		FBHwSwNtwrk = fBHwSwNtwrk;
+	}
+
+	public String getParticipantName() {
+		return participantName;
+	}
+
+	public void setParticipantName(String participantName) {
+		this.participantName = participantName;
+	}
+
+	public Date getFeedbackDate() {
+		return feedbackDate;
+	}
+
+	public void setFeedbackDate(Date feedbackDate) {
+		this.feedbackDate = feedbackDate;
+	}
+
+	@Override
+	public String toString() {
+		return "Feedback [participantId=" + participantId + ", trainingCode="
+				+ trainingCode + ", comment=" + comment + ", suggestions="
+				+ suggestions + ", FbPrsComm=" + FbPrsComm + ", FbClrfyDbts="
+				+ FbClrfyDbts + ", FbTm=" + FbTm + ", FbHandout=" + FbHandout
+				+ ", FBHwSwNtwrk=" + FBHwSwNtwrk + ", participantName="
+				+ participantName + ", feedbackDate=" + feedbackDate + "]";
+	}
+	
 }

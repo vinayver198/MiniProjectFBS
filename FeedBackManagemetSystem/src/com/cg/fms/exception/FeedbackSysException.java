@@ -15,5 +15,34 @@ package com.cg.fms.exception;
 
 
 /** */
-public class FeedbackSysException {
+public class FeedbackSysException extends Exception{
+
+	public FeedbackSysException() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public FeedbackSysException(String message, Throwable cause,
+			boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+		// TODO Auto-generated constructor stub
+	}
+
+	public FeedbackSysException(String message, Throwable cause) {
+		super(message, cause);
+		// TODO Auto-generated constructor stub
+	}
+
+	public FeedbackSysException(String message) {
+		super(message);
+		// TODO Auto-generated constructor stub
+	}
+
+	public FeedbackSysException(Throwable cause) {
+		super(cause);
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
 }

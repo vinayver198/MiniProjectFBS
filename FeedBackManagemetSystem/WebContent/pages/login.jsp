@@ -30,7 +30,7 @@
 </head>
 <body id="content" height="800px" width="100%">
 
-<form name="moduleFoam" method="post" action="LoginController?action=doLogin" onSubmit="return check()"">
+<form name="moduleFoam" method="post" action="LoginController?action=doLogin" onSubmit="return check()">
 <table align="center" width="28%" height="40%">
 
 <tr>

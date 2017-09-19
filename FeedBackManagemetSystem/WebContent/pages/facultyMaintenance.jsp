@@ -4,12 +4,12 @@
     
 <%@ page import = "java.util.ArrayList"
     	import = "com.cg.fms.dto.FacultySkill" %>
-    
+     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Faculty Maintenance Page</title>
 </head>
 <body>
 
@@ -75,8 +75,17 @@
     padding:10px;
     float: right;
     margin: 10px;">
+
+
+<%!
+	int counter = 0;
+
+	public int getCounter(){
+		return counter;
+	}
+%>
     
-    <body>
+
 
 <p align="center">Course List</p>
 <table align="center" border="1">
@@ -86,26 +95,39 @@
 <col width="100">
 <col width="80">
 <tr>
-<th> <b>Course Name</b> </th> <th><b>Duration(Days)</b> </th> <th><b>Assigned Faculty</b> </th> 
+<th> <b>Course Name</b> </th> <th><b>Duration (Days)</b> </th> <th><b>Assigned Faculty</b> </th> 
 
 <th><b>Faculty List</b> </th>  <th><b>Assign</b> </th>
 
 </tr>
 
+<%
+	counter = 0;
+%>
+
 <c:forEach var="course" items="${courseArrayList}">
 
 <tr>
 
+<form name="courseForm<%= counter %>" method="post" action="AdminController?action=AssignFaculty&courseCounterNo=<%= counter %>" onSubmit="return check()">
+<input type="hidden" name="courseId" id="courseId" value="<%= counter %>"/>
 <td>${course.name}</td>
 
 <td><div align="center">${course.duration}</div></td>
 
 <td>
 <table >
-<c:forEach var="faculty" items="${course.faculty}">
+<%
+	int count=0;
+%>
+<c:forEach var="faculty" items="${course.facultyNames}">
 <tr>
-<td>${faculty}</td>
+<td>${faculty}</td><td><div align="right">
+	<input type="submit" name="btRemoveFaculty<%= counter %><%= count %>" value="X"/></div></td>
 </tr>
+<%
+	count++;
+%>
 </c:forEach>
 </table>
 </td>
@@ -113,9 +135,9 @@
 <td>
 
 <table>
-<div align="center"><select id="facultyNameList" name="facultyNameList">
+<div align="center"><select id="ddfacultyNameList" name="ddfacultyNameList<%= counter %>">
 <c:forEach var="facultyName" items="${facultiesNameList}">
-<option value=""> ${facultyName}
+<option value="${facultyName}"> ${facultyName}
 </c:forEach>
 </select></div>
 </table>
@@ -123,17 +145,22 @@
 </td>
 
 <td>
-<div align="center"><input type="button" value="Assign"/></div>
+<div align="center"><input type="submit" name="btAssignFaculty<%= counter %>" value="assign"/></div>
 </td>
+
+</form>
 
 </tr>
 
+<%
+	counter++;
+%>
 
 </c:forEach>
 
 </table>
 
-</body>
+
     
     
     

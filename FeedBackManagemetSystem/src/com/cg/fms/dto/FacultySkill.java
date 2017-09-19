@@ -14,6 +14,7 @@
 package com.cg.fms.dto;
 
 import java.util.Arrays;
+import java.util.List;
 
 
 /** */
@@ -22,7 +23,7 @@ public class FacultySkill {
 	private int id;
 	
 	/** */
-	private String[] skillSet;
+	private List<String> skillSet;
 	
 	/** */
 	public String name;
@@ -33,10 +34,7 @@ public class FacultySkill {
 	
 	}
 	
-	
-	
-	
-	public FacultySkill(int id, String[] skillSet, String name) {
+	public FacultySkill(int id, List<String> skillSet, String name) {
 		super();
 		this.id = id;
 		this.skillSet = skillSet;
@@ -50,7 +48,7 @@ public class FacultySkill {
 		return id;
 	}
 
-	public String[] getSkillSet() {
+	public List<String> getSkillSet() {
 		return skillSet;
 	}
 
@@ -62,7 +60,7 @@ public class FacultySkill {
 		this.id = id;
 	}
 
-	public void setSkillSet(String[] skillSet) {
+	public void setSkillSet(List<String> skillSet) {
 		this.skillSet = skillSet;
 	}
 
@@ -70,16 +68,11 @@ public class FacultySkill {
 		this.name = name;
 	}
 
-
-
-
 	@Override
 	public String toString() {
-		return "FacultySkill [id=" + id + ", skillSet="
-				+ Arrays.toString(skillSet) + ", name=" + name + "]";
+		return "FacultySkill [id=" + id + ", skillSet=" + skillSet + ", name="
+				+ name + "]";
 	}
-	
-	
-	
-	
+
+
 }

@@ -26,4 +26,35 @@ public class TrainingParticipant {
 	public void TrainingParticipant() {
 	
 	}
+
+	public int getTrainingCode() {
+		return trainingCode;
+	}
+
+	public void setTrainingCode(int trainingCode) {
+		this.trainingCode = trainingCode;
+	}
+
+	public int getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public TrainingParticipant(int trainingCode, int employeeId) {
+		super();
+		this.trainingCode = trainingCode;
+		this.employeeId = employeeId;
+	}
+
+	@Override
+	public String toString() {
+		return "TrainingParticipant [trainingCode=" + trainingCode
+				+ ", employeeId=" + employeeId + "]";
+	}
+	
+	
+	
 }

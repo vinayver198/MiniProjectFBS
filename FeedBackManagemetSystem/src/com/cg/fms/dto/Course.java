@@ -13,7 +13,9 @@
 
 package com.cg.fms.dto;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /** */
@@ -27,12 +29,20 @@ public class Course {
 	/** */
 	private int duration;
 	
-	private int[] faculty;
+	private List<Integer> faculty = null;
+
+	private List<String> facultyNames = null;
 	
+
 	
-	/** */
-	public void Course() {
-	
+
+	public List<String> getFacultyNames() {
+		return facultyNames;
+	}
+
+
+	public void setFacultyNames(List<String> facultyNames) {
+		this.facultyNames = facultyNames;
 	}
 
 
@@ -51,7 +61,7 @@ public class Course {
 	}
 
 
-	public int[] getFaculty() {
+	public List<Integer> getFaculty() {
 		return faculty;
 	}
 
@@ -71,28 +81,32 @@ public class Course {
 	}
 
 
-	public void setFaculty(int[] faculty) {
+	public void setFaculty(List<Integer> faculty) {
 		this.faculty = faculty;
 	}
 
 
-	public Course(int id, String name, int duration, int[] faculty) {
+	public Course(int id, String name, int duration, List<Integer> faculty,List<String> facultyNames) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.duration = duration;
 		this.faculty = faculty;
+		this.facultyNames = facultyNames;
+	}
+
+
+	public Course() {
+		faculty = new ArrayList<Integer>();
+		facultyNames = new ArrayList<String>();
 	}
 
 
 	@Override
 	public String toString() {
 		return "Course [id=" + id + ", name=" + name + ", duration=" + duration
-				+ ", faculty=" + Arrays.toString(faculty) + "]";
+				+ ", faculty=" + faculty + ", facultyNames=" + facultyNames
+				+ "]";
 	}
-	
-	
-	
-	
-	
+
 }
