@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,12 +26,12 @@ import com.cg.fms.service.TrainingAdminServiceImpl;
 public class AdminController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private TrainingAdminService adminService;
+	private TrainingAdminService adminService = null;
 	private ArrayList<FacultySkill> facultyArrayList = null;
 	private ArrayList<Course> courseArrayList = null;
 	
 	private ArrayList<String> facultiesNameList = null;
-	private HashMap<String,Integer> facultiesMap = null;
+	private HashMap<Integer,String> facultiesMap = null;
 	
     /**
      * Default constructor. 
@@ -44,7 +45,8 @@ public class AdminController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
+		
 		RequestDispatcher view = null;
 		String action = request.getParameter("action");
 		System.out.println("action : " + action );
@@ -55,34 +57,40 @@ public class AdminController extends HttpServlet {
 
 			if(facultyArrayList == null && courseArrayList == null){
 				
+			// contains names of all faculties	
 			facultiesNameList = new ArrayList<String>();
-			facultiesMap = new HashMap<String,Integer>();
+			
+			// contains employee id and name of all faculties
+			facultiesMap = new HashMap<Integer,String>();
+			
+			
 				try {
-				
-					facultyArrayList = (ArrayList<FacultySkill>) adminService.getAllFacultyList();
-				
-					courseArrayList = (ArrayList<Course>) adminService.getAllCourseList();
-				
-					for(FacultySkill fs : facultyArrayList){
-						facultiesNameList.add(fs.getName());
-						facultiesMap.put(fs.getName(),fs.getId());
-					}
-				
+					
+					setUpFacultyMaintancePage();
+					
+					
+					request.setAttribute("facultiesMap", facultiesMap);
+					request.setAttribute("facultyList", facultyArrayList);
+					request.setAttribute("courseArrayList", courseArrayList);
+					request.setAttribute("facultiesNameList", facultiesNameList);
+					
+					request.setAttribute("pageHeading","Faculty Maintenance Page");
+					request.getSession().setAttribute("role", "admin");
+					
+					view = getServletContext().getRequestDispatcher(
+							"/pages/facultyMaintenance.jsp");
+					view.forward(request, response);
+					
+					
 				} catch (FeedbackSysException e) {
-					e.printStackTrace();
+					
+					forwardToErrorPage(request,response,e.getMessage());
+
 				}
 						
 			}
 			
-			request.setAttribute("facultiesMap", facultiesMap);
-			request.setAttribute("facultyList", facultyArrayList);
-			request.setAttribute("courseArrayList", courseArrayList);
-			request.setAttribute("facultiesNameList", facultiesNameList);
 			
-			request.getSession().setAttribute("role", "admin");
-			view = getServletContext().getRequestDispatcher(
-					"/pages/facultyMaintenance.jsp");
-			view.forward(request, response);
 			
 			break;
 			
@@ -95,12 +103,14 @@ public class AdminController extends HttpServlet {
 			break;
 		
 		default:
-			// Dispatch to error page
+			forwardToErrorPage(request,response,"default case");
 			break;
 		}
 		
 		
 	}
+
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -128,54 +138,135 @@ public class AdminController extends HttpServlet {
 		case "AssignFaculty":
 			// assign faculty to course
 			
-			String jspTableIndex = request.getParameter("courseCounterNo");
-			String facultyNameToAdd = request.getParameter("ddfacultyNameList"+jspTableIndex);
+			int courseTableIndex = Integer.parseInt(request.getParameter("courseCounterNo"));
+			String facultyNameToAdd = request.getParameter("ddfacultyNameList"+courseTableIndex);
 			
-			List<String> assignedFacultylist = courseArrayList.get(
-													Integer.parseInt(jspTableIndex)).getFacultyNames();
+			try {
 			
-			List<Integer> assignedFacltyIdsList = courseArrayList.get(
-							Integer.parseInt(jspTableIndex)).getFaculty();
-			
-			if(request.getParameter("btAssignFaculty"+jspTableIndex) != null){
+				if(request.getParameter("btAssignFaculty"+courseTableIndex) != null){
 				
-				if(!assignedFacultylist.contains(facultyNameToAdd)){
-					assignedFacultylist.add(facultyNameToAdd);
-					assignedFacltyIdsList.add(facultiesMap.get(facultyNameToAdd));
-				}
+					assignFacultyToCourse(facultyNameToAdd,courseTableIndex);
 				
-			}else{
-				
-				for(int i=0;i< assignedFacultylist.size() ;i++){
-					String name = request.getParameter("btRemoveFaculty"+Integer.parseInt(jspTableIndex)+i);
+				}else{
 					
-					if(name != null){
-						assignedFacultylist.remove(i);
-						assignedFacltyIdsList.remove(i);
-					}
+					reomveFacultyFromCourse(facultyNameToAdd,courseTableIndex,request);
 				}
 				
+				
+				request.setAttribute("facultyList", facultyArrayList);
+				request.setAttribute("courseArrayList", courseArrayList);
+				request.setAttribute("facultiesNameList", facultiesNameList);
+				
+			
+				request.setAttribute("pageHeading","Faculty Maintenance Page");
+				view = getServletContext().getRequestDispatcher(
+						"/pages/facultyMaintenance.jsp");
+				
+				view.forward(request, response);
+			
+			} catch (FeedbackSysException e) {
+				forwardToErrorPage(request,response,e.getMessage());
 			}
 			
-			
-			courseArrayList.get(Integer.parseInt(jspTableIndex)).setFacultyNames(assignedFacultylist);
-			courseArrayList.get(Integer.parseInt(jspTableIndex)).setFaculty(assignedFacltyIdsList);
-			
-			request.setAttribute("facultyList", facultyArrayList);
-			request.setAttribute("courseArrayList", courseArrayList);
-			request.setAttribute("facultiesNameList", facultiesNameList);
-			
-			view = getServletContext().getRequestDispatcher(
-					"/pages/facultyMaintenance.jsp");
-			
-			view.forward(request, response);
 			
 			break;
 		
 		default:
-			// Dispatch to error page
+			forwardToErrorPage(request,response,"default case");
 			break;
 		}
 	}
 
+	private void reomveFacultyFromCourse(String facultyNameToAdd,
+			int jspTableIndex, HttpServletRequest request) throws FeedbackSysException {
+		
+		List<String> assignedFacultylist = courseArrayList.get(jspTableIndex).getFacultyNames();
+		
+		List<Integer> assignedFacltyIdsList = courseArrayList.get(jspTableIndex).getFaculty();
+		
+		for(int i=0;i< assignedFacultylist.size() ;i++){
+			
+			String name = request.getParameter("btRemoveFaculty"+jspTableIndex +i);
+			
+			if(name != null){
+				assignedFacultylist.remove(i);
+				assignedFacltyIdsList.remove(i);
+			}
+		}
+		
+		courseArrayList.get(jspTableIndex).setFacultyNames(assignedFacultylist);
+		courseArrayList.get(jspTableIndex).setFaculty(assignedFacltyIdsList);
+		adminService.updateCourseWithId(courseArrayList.get(jspTableIndex));
+		
+	}
+
+	private void assignFacultyToCourse(String facultyNameToAdd, int jspTableIndex) throws FeedbackSysException {
+		
+		List<String> assignedFacultylist = courseArrayList.get(jspTableIndex).getFacultyNames();
+		
+		List<Integer> assignedFacltyIdsList = courseArrayList.get(jspTableIndex).getFaculty();
+		
+		
+		if(!assignedFacultylist.contains(facultyNameToAdd)){
+			
+			assignedFacultylist.add(facultyNameToAdd);
+			
+			
+			
+			Set<Integer> keys = facultiesMap.keySet();
+			
+			for(int id : keys){
+				
+				if(facultiesMap.get(id).equals(facultyNameToAdd))
+				{
+					assignedFacltyIdsList.add(id);
+					System.out.println("doing : " + id + " : " + facultiesMap.get(id));
+				}
+				
+			}
+				
+		}
+		
+		
+		courseArrayList.get(jspTableIndex).setFacultyNames(assignedFacultylist);
+		courseArrayList.get(jspTableIndex).setFaculty(assignedFacltyIdsList);
+			
+		adminService.updateCourseWithId(courseArrayList.get(jspTableIndex));
+		
+		
+	}
+	
+	private void forwardToErrorPage(HttpServletRequest request,
+			HttpServletResponse response, String message) throws ServletException, IOException {
+		
+		request.setAttribute("errMsg", message);
+		 getServletContext().getRequestDispatcher(
+				"/pages/error.jsp").forward(request, response);
+		
+	}
+
+	private void setUpFacultyMaintancePage() throws FeedbackSysException {
+		
+		facultyArrayList = (ArrayList<FacultySkill>) adminService.getAllFacultyList();
+		
+		courseArrayList = (ArrayList<Course>) adminService.getAllCourseList();
+		
+		for(FacultySkill fs : facultyArrayList){
+			facultiesNameList.add(fs.getName());
+			facultiesMap.put(fs.getId(),fs.getName());
+		}
+		
+		
+		for(Course course : courseArrayList){
+			
+			for(int i=0;i<course.getFaculty().size();i++){
+				
+				course.getFacultyNames().add(facultiesMap.get(course.getFaculty().get(i)));
+				
+			}
+			
+		}
+		
+	}
+	
 }

@@ -49,7 +49,7 @@ public class FMSDaoImpl implements FMSDao {
 		try(Connection con=DBUtil.getConnect())
 		{
 			PreparedStatement pstm=
-					con.prepareStatement("select * from feedback_master");
+					con.prepareStatement(QueryMapper.SELECT_ALL_FEEDBACK);
 			ResultSet res = pstm.executeQuery();
 			list = new ArrayList<Feedback>();
 			if(res.next()==false)
@@ -421,6 +421,7 @@ public class FMSDaoImpl implements FMSDao {
 				course.setId(res.getInt(1));
 				course.setName(res.getString(2));
 				course.setDuration(res.getInt(3));
+				course.setFaculty(buildfacultyIntArray(res.getString(4)));
 				courses.add(course);
 			}
 			
@@ -451,10 +452,15 @@ public class FMSDaoImpl implements FMSDao {
 			int duration = course.getDuration();
 			int id = course.getId();
 			
-			PreparedStatement pstm = con.prepareStatement("update course_master set name= ?,duration =? where id= ?");
+			String facultyId = bulidFacultyIdString(course.getFaculty());
+			
+			PreparedStatement pstm = con.prepareStatement(
+					"UPDATE course_master SET COURSE_NAME= ?,NO_DAYS =?,FACULTY_ID=? where COURSE_ID= ?");
+			
 			pstm.setString(1,name);
 			pstm.setInt(2,duration);
-			pstm.setInt(3,id);
+			pstm.setString(3,facultyId);
+			pstm.setInt(4,id);
 			
 			pstm.execute();
 			flag = true;
@@ -465,6 +471,20 @@ public class FMSDaoImpl implements FMSDao {
 		return flag;
 	}
 	
+	private String bulidFacultyIdString(List<Integer> faculty) {
+		
+		if(faculty == null)
+			return null;
+		
+		String ids = "";
+		
+		for(int id : faculty){
+			ids = ids.concat(id+";");
+		}
+		return ids;
+	}
+
+
 	/** 
 	 * 
 	 * @ Date : 16-09-2017
@@ -589,6 +609,10 @@ public class FMSDaoImpl implements FMSDao {
 	public List<String> buildSkillStringArray(String skill){
 		
 		List<String> skillList = new ArrayList<String>();
+		
+		if(skill == null)
+			return skillList;
+		
 		int count = 0;
 		int index = 0;
 		
@@ -607,5 +631,61 @@ public class FMSDaoImpl implements FMSDao {
 		return skillList;
 	}
 	
+	
+	public List<Integer> buildfacultyIntArray(String ids){
+		
+		List<Integer> idList = new ArrayList<Integer>();
+		
+		if(ids == null)
+			return idList;
+		
+		
+		int count = 0;
+		int index = 0;
+		
+		while(true){
+			
+			if(count < ids.length()-1){
+				String id = ids.substring(count,ids.indexOf(";",count+1));
+				idList.add(Integer.parseInt(id));
+				count = ids.indexOf(";",count+1) + 1;
+				index++;
+				
+			}else{
+				break;
+			}
+		}
+		
+		return idList;
+	}
+	
+	
+	
+	/** 
+	 * 
+	 * @date : 21-09-2017
+  	 * @author : Vikas Chaudhary
+	 * @description : class containing all the queries for the tables.
+	 * @version 1.0
+	 * */
+	static class QueryMapper{
+		
+		public static final String SELECT_ALL_FEEDBACK= "select * from feedback_master";
+		public static final String INSERT_FEEDBACK= "insert into feedback_master values(?,?,?,?,?,?,?,?,?,?,?,?)";
+		public static final String INSERT_TRAINING_PARTICIPANT= "insert into training_parti_enroll values(?,?)";
+		public static final String SELECT_ALL_TAINING_PROGRAM = "SELECT * from TRAINING_PROGRAM";
+		public static final String UPDATE_TRAINING_PROGRAM= "update TRAINING_PROGRAM set COURSE_CODE=?, FACULTY_CODE=?, START_DATE=?, END_DATE=? where TRAINING_CODE=?";
+		public static final String GET_NEXT_TRAINING_PROGRAM_ID= "select TRAININGPROG_seq.nextVal from dual";
+		public static final String ADD_TRAINING_PROGRAM= "insert into TRAINING_PROGRAM values(?,?,?,?,?)";
+		public static final String SELECT_ALL_EMPLOYEE= "select * from Employee_master ";
+		public static final String SELECT_EMPLOYEE_NAME_AND_ID = "select Employee_Id,Employee_Name from Employee_master ";
+		public static final String SELECT_ALL_COURSE = "SELECT * FROM COURSE_MASTER";
+		public static final String UPDATE_COURSE = "UPDATE course_master SET COURSE_NAME= ?,NO_DAYS =?,FACULTY_ID=? where COURSE_ID= ?";
+		public static final String SELECT_NAME_AND_ID_COURSE = "Select id , name from course_master";
+		public static final String SELECT_COURSE_WITH_ID ="select * from COURSE_MASTER where id=?";
+		public static final String DELETE_COURSE_WITH_ID ="delete from COURSE_MASTER where id=?";
+		public static final String SELECT_ALL_FACULTY  ="SELECT * FROM faculty_skillset_master";
+		public static final String SELECT_FACULTY_WITH_ID ="SELECT EMPLOYEE_ID,EMPLOYEE_NAME FROM EMPLOYEE_MASTER WHERE EMPLOYEE_ID = ";
+	}
 	
 }

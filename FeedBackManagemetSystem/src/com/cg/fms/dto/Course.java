@@ -34,8 +34,6 @@ public class Course {
 	private List<String> facultyNames = null;
 	
 
-	
-
 	public List<String> getFacultyNames() {
 		return facultyNames;
 	}

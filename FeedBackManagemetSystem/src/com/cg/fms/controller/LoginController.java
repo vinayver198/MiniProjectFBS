@@ -1,7 +1,6 @@
 package com.cg.fms.controller;
 
 import java.io.IOException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +16,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
-	
+	private static RequestDispatcher view = null;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -32,7 +31,29 @@ public class LoginController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		doPost(request, response);
+		//doPost(request, response);
+		
+		String action = request.getParameter("action");
+		
+		switch(action){
+		
+		case "home":
+			
+			break;
+		case "back":
+			
+			break;
+		case "logout":
+			
+			break;
+		default:
+			
+			break;
+				
+		
+		}
+		
+		
 	}
 
 	/**
@@ -41,7 +62,6 @@ public class LoginController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
-		RequestDispatcher view = null;
 		String action = request.getParameter("action");
 		System.out.println("action : " + action );
 		
@@ -85,7 +105,7 @@ public class LoginController extends HttpServlet {
 	private void dispatchToUserHome(AuthFactory.Role authenticate, HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		RequestDispatcher view = null;
+		
 		
 		switch(authenticate){
 			case ADMIN:
@@ -133,6 +153,43 @@ public class LoginController extends HttpServlet {
 			return Role.ADMIN;
 		}
 		
+		private static void logout(HttpSession session){
+			
+			if(session != null){
+				
+				session.invalidate();
+				session = null;
+			}
+		}
+		
+		private static void forwardHome(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException{
+			
+			HttpSession session = request.getSession(false);
+			
+			if(session == null)
+				return;
+			
+			String role = (String) session.getAttribute("role");
+			
+			if(role.equals("admin")){
+				request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+			}
+			else if(role.equals("coordinator")){
+				request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+			}
+			else if(role.equals("participant")){
+				request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+			}else{
+				request.setAttribute("errMsg", "Role Conflict");
+				request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+			}
+				
+				
+		}
+		
+		private static void goBack(){
+			// to do write logic
+		}
 	}
 
 }

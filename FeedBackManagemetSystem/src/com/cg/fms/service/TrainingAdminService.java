@@ -38,7 +38,7 @@ public interface TrainingAdminService {
 	public List<Course> getAllCourseList() throws FeedbackSysException;
 	
 	/** */
-	public boolean updateCourseWithId(int id) throws FeedbackSysException;
+	public boolean updateCourseWithId(Course course) throws FeedbackSysException;
 	
 	/** */
 	public List<Employee> getAllEmployeeList() throws FeedbackSysException;

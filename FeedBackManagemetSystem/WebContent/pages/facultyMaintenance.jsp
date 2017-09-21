@@ -13,13 +13,17 @@
 </head>
 <body>
 
+<%@ include file ="/pages/header.jsp"%>
+ 
+
+
 <div style="
     width: 30%;
     min-height: 100px;
     background-color: white;
     border: solid;
     border-color: darkseagreen;
-    border-style: dashed;
+    border-style: ridge;
     border-width: thick;
     margin: 10px;
     padding:10px;
@@ -40,7 +44,7 @@
 
 <tr>
 
-<td>${faculty.name}</td>
+<td><div align="center">${faculty.name}</div></td>
 
 <td>
 <table >
@@ -70,7 +74,7 @@
     background-color: white;
     border: solid;
     border-color: darkseagreen;
-    border-style: dashed;
+    border-style: ridge;
     border-width: thick;
     padding:10px;
     float: right;
@@ -111,18 +115,18 @@
 
 <form name="courseForm<%= counter %>" method="post" action="AdminController?action=AssignFaculty&courseCounterNo=<%= counter %>" onSubmit="return check()">
 <input type="hidden" name="courseId" id="courseId" value="<%= counter %>"/>
-<td>${course.name}</td>
+<td><div align="center">${course.name}</div></td>
 
 <td><div align="center">${course.duration}</div></td>
 
 <td>
-<table >
+<table align="center">
 <%
 	int count=0;
 %>
 <c:forEach var="faculty" items="${course.facultyNames}">
 <tr>
-<td>${faculty}</td><td><div align="right">
+<td><div align="center">${faculty}</div></td><td><div align="right">
 	<input type="submit" name="btRemoveFaculty<%= counter %><%= count %>" value="X"/></div></td>
 </tr>
 <%

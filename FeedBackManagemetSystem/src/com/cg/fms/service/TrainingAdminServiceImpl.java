@@ -58,9 +58,10 @@ public class TrainingAdminServiceImpl implements TrainingAdminService {
 		return fmsDao.getAllCourseList();
 	}
 	
-	/** */
-	public boolean updateCourseWithId(int id) {
-		return false;
+	/**
+	 * @throws FeedbackSysException  */
+	public boolean updateCourseWithId(Course course) throws FeedbackSysException {
+		return fmsDao.updateCourseWithId(course);
 	}
 	
 	/** */
