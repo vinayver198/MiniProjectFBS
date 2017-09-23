@@ -13,5 +13,6 @@
  
 
 <a href="AdminController?action=facultyMaintancePage">Faculty Maintance Page</a>
+<a href="AdminController?action=trainingMaintenancePage">Training Page</a>
 </body>
 </html>

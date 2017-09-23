@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.cg.fms.dto.Course;
 import com.cg.fms.dto.FacultySkill;
+import com.cg.fms.dto.TrainingProgram;
 import com.cg.fms.exception.FeedbackSysException;
 import com.cg.fms.service.TrainingAdminService;
 import com.cg.fms.service.TrainingAdminServiceImpl;
@@ -55,7 +56,7 @@ public class AdminController extends HttpServlet {
 		
 		case "facultyMaintancePage":
 
-			if(facultyArrayList == null && courseArrayList == null){
+			if(courseArrayList == null){
 				
 			// contains names of all faculties	
 			facultiesNameList = new ArrayList<String>();
@@ -68,6 +69,7 @@ public class AdminController extends HttpServlet {
 					
 					setUpFacultyMaintancePage();
 					
+				
 					
 					request.setAttribute("facultiesMap", facultiesMap);
 					request.setAttribute("facultyList", facultyArrayList);
@@ -94,8 +96,29 @@ public class AdminController extends HttpServlet {
 			
 			break;
 			
-		case "trainingMaintancePage":
-			// Dispatch to Training Maintance Page
+		case "trainingMaintenancePage":
+			
+			try {
+				
+				
+				List<TrainingProgram> trainingProgramList = adminService.getAllTrainingProgramList();
+					getFacultyNames();
+				
+				request.setAttribute("trainingPrograms",trainingProgramList);
+				request.setAttribute("pageHeading","Faculty Maintenance Page");
+				request.setAttribute("facultiesNameList", facultiesNameList);
+				request.getSession().setAttribute("role", "admin");
+				
+				view = getServletContext().getRequestDispatcher(
+						"/pages/trainingMaintenance.jsp");
+				view.forward(request, response);
+				
+			} catch (FeedbackSysException e) {
+				
+				forwardToErrorPage(request,response,e.getMessage());
+			}
+			
+			
 			break;
 		
 		case "feedbackReportPage":
@@ -245,6 +268,8 @@ public class AdminController extends HttpServlet {
 		
 	}
 
+	
+	
 	private void setUpFacultyMaintancePage() throws FeedbackSysException {
 		
 		facultyArrayList = (ArrayList<FacultySkill>) adminService.getAllFacultyList();
@@ -268,5 +293,19 @@ public class AdminController extends HttpServlet {
 		}
 		
 	}
+	
+	private void getFacultyNames() throws FeedbackSysException{
+		
+		facultiesNameList = new ArrayList<String>();
+		
+		facultyArrayList = (ArrayList<FacultySkill>) adminService.getAllFacultyList();
+		
+		for(FacultySkill fs : facultyArrayList){
+			facultiesNameList.add(fs.getName());
+			//facultiesMap.put(fs.getId(),fs.getName());
+		}
+		
+	}
+	
 	
 }

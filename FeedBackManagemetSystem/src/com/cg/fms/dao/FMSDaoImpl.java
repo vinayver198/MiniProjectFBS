@@ -186,7 +186,6 @@ public class FMSDaoImpl implements FMSDao {
 		 */
 	@Override
 	public ArrayList<TrainingProgram> getAllTrainingProgramList() throws FeedbackSysException {
-		// TODO Auto-generated method stub
 		TrainingProgram program=null;
 		ArrayList<TrainingProgram> programList= null;
 		try(Connection con =DBUtil.getConnect())

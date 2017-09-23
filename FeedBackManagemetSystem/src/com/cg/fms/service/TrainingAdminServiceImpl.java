@@ -69,8 +69,9 @@ public class TrainingAdminServiceImpl implements TrainingAdminService {
 		return null;
 	}
 	
-	/** */
-	public List<TrainingProgram> getAllTrainingProgramList() {
-		return null;
+	/**
+	 * @throws FeedbackSysException  */
+	public List<TrainingProgram> getAllTrainingProgramList() throws FeedbackSysException {
+		return fmsDao.getAllTrainingProgramList();
 	}
 }
